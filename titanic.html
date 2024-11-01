@@ -5210,7 +5210,7 @@ PA --&gt; C(&quot;Computing information&quot;)
 </section>
 <section id="definition-of-outcome" class="level2">
 <h2 class="anchored" data-anchor-id="definition-of-outcome">Definition of outcome</h2>
-<p>Next, I define the primary outcome with a new variable <code>event</code> and assess missing data.</p>
+<p>Next, I define the primary outcome with a new variable called <code>event</code>. It is a binary outcome set to <code>TRUE</code> when the passenger survived, and <code>FALSE</code> otherwise.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -5250,7 +5250,7 @@ PA --&gt; C(&quot;Computing information&quot;)
 </section>
 <section id="create-analysis-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="create-analysis-dataset">Create analysis dataset</h2>
-<p>We will do a complete case analysis (not recommended); however, here it is fit for purpose. The analysis data set is stored in the object <code>titanic</code>.</p>
+<p>We will do a complete case analysis. Actually, this is not really recommended; however, here it is fit for purpose. The analysis data set is stored in the object <code>titanic</code>.</p>
 <p>How can missing data be addressed otherwise?</p>
 <div class="cell">
 <details class="code-fold">
@@ -5495,10 +5495,9 @@ Matrix products: default
 
 
 locale:
-[1] LC_COLLATE=English_Switzerland.utf8  LC_CTYPE=C                          
+[1] LC_COLLATE=English_Switzerland.utf8  LC_CTYPE=English_Switzerland.utf8   
 [3] LC_MONETARY=English_Switzerland.utf8 LC_NUMERIC=C                        
 [5] LC_TIME=English_Switzerland.utf8    
-system code page: 65001
 
 time zone: Europe/Zurich
 tzcode source: internal
@@ -5516,10 +5515,10 @@ loaded via a namespace (and not attached):
 [13] rmarkdown_2.28    grid_4.4.1        munsell_0.5.1     evaluate_1.0.1   
 [17] tibble_3.2.1      fastmap_1.2.0     yaml_2.3.10       lifecycle_1.0.4  
 [21] compiler_4.4.1    ggsurvfit_1.1.0   dplyr_1.1.4       htmlwidgets_1.6.4
-[25] pkgconfig_2.0.3   lattice_0.22-6    digest_0.6.37     R6_2.5.1         
-[29] tidyselect_1.2.1  utf8_1.2.4        splines_4.4.1     pillar_1.9.0     
-[33] magrittr_2.0.3    Matrix_1.7-0      gtable_0.3.5      tools_4.4.1      
-[37] survival_3.7-0    ggplot2_3.5.1    </code></pre>
+[25] pkgconfig_2.0.3   rstudioapi_0.17.1 lattice_0.22-6    digest_0.6.37    
+[29] R6_2.5.1          tidyselect_1.2.1  utf8_1.2.4        splines_4.4.1    
+[33] pillar_1.9.0      magrittr_2.0.3    Matrix_1.7-0      gtable_0.3.5     
+[37] tools_4.4.1       survival_3.7-0    ggplot2_3.5.1    </code></pre>
 </div>
 </div>
 </section>
