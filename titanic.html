@@ -5050,7 +5050,7 @@ z-index: 1000;
 <div>
   <div class="abstract">
     <div class="block-title">Abstract</div>
-    An introduction to Quarto for the participants in the Good Research Practice (GRP) course of the University of Zurich.
+    An introduction to Quarto for the participants in the Good Research Practice (GRP) course at the University of Zurich.
   </div>
 </div>
 
@@ -5080,7 +5080,7 @@ PA --&gt; C(&quot;Computing information&quot;)
 </div>
 </div>
 </div>
-<p>Here is a somewhat more detailed <a href="https://swisstransplant.github.io/rcookbook/#data-analysis-workflow">Data Analysis Workflow</a> which I’m using in my own projects.</p>
+<p>Here is a somewhat more detailed <a href="https://swisstransplant.github.io/rcookbook/#data-analysis-workflow">Data Analysis Workflow</a> that I’m using in my own projects.</p>
 <p>A final word of caution.</p>
 <blockquote class="blockquote">
 <p>“A $100 analysis can make a $1,000,000 study worthless” –Frank Harrell</p>
@@ -5250,7 +5250,7 @@ PA --&gt; C(&quot;Computing information&quot;)
 </section>
 <section id="create-analysis-dataset" class="level2">
 <h2 class="anchored" data-anchor-id="create-analysis-dataset">Create analysis dataset</h2>
-<p>We will do a complete case analysis. Actually, this is not really recommended; however, here it is fit for purpose. The analysis data set is stored in the object <code>titanic</code>.</p>
+<p>We will do a complete case analysis. Actually, this is not really recommended; however, in this tutorial, it is fit for purpose. The analysis data set is stored in the object <code>titanic</code>.</p>
 <p>How can missing data be addressed otherwise?</p>
 <div class="cell">
 <details class="code-fold">
@@ -5265,7 +5265,7 @@ PA --&gt; C(&quot;Computing information&quot;)
 <h1>Quality control</h1>
 <p>Quality control is a crucial step and should be part of any data analysis pipeline. A test is like a question to the data that should be true, for example:</p>
 <ul>
-<li>Have all passangers a value in <code>passengerClass</code> (no missing)?</li>
+<li>Do all passengers have a value in <code>passengerClass</code> (no missing)?</li>
 <li>Are all the values in <code>age</code> larger than 0 and smaller than 100?</li>
 </ul>
 <p>As soon as the logical expression within the function <code>assert</code> is not met, an error will be thrown.</p>
@@ -5303,7 +5303,7 @@ PA --&gt; C(&quot;Computing information&quot;)
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="caption-top table table-sm table-striped small">
-<caption>Table 1: Descriptives of the Titanic passangers.</caption>
+<caption>Table 1: Descriptives of the Titanic passengers.</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;"></th>
@@ -5324,11 +5324,11 @@ PA --&gt; C(&quot;Computing information&quot;)
 </div>
 </div>
 </div>
-<p>You can now try to extend Table 1 and also report the count (and %) for categorical variables <code>sex</code> and <code>passangerClass</code>.</p>
+<p>You can now try to extend Table 1 and also report the count (and %) for categorical variables <code>sex</code> and <code>passengerClass</code>.</p>
 </section>
 <section id="primary-analysis" class="level1">
 <h1>Primary analysis</h1>
-<p>We fit a regression model to predict a binary outcome with a logistic regression model. I also set the reference levels to my liking.</p>
+<p>We fit a logistic regression model to predict the binary outcome “survived: yes”. I also set the reference levels to my liking.</p>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -5424,7 +5424,7 @@ PA --&gt; C(&quot;Computing information&quot;)
 <div class="cell-output-display">
 <div class="kable-table">
 <table class="caption-top table table-sm table-striped small">
-<caption>Table 2: Results from logistic model.</caption>
+<caption>Table 2: Results from a logistic regression model.</caption>
 <thead>
 <tr class="header">
 <th style="text-align: left;"></th>

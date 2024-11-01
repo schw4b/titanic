@@ -3,7 +3,7 @@ title: 'A reanalysis of the Titanic data set in R and Quarto'
 subtitle: 'Statistical report'
 author: Simon Schwab
 date: last-modified
-abstract: 'An introduction to Quarto for the participants in the Good Research Practice (GRP) course of the University of Zurich.'
+abstract: 'An introduction to Quarto for the participants in the Good Research Practice (GRP) course at the University of Zurich.'
 lang: en
 format:
   html:
@@ -32,7 +32,7 @@ DS --> PA("Primary analysis")
 PA --> C("Computing information")
 ```
 
-Here is a somewhat more detailed [Data Analysis Workflow](https://swisstransplant.github.io/rcookbook/#data-analysis-workflow) which I'm using in my own projects.
+Here is a somewhat more detailed [Data Analysis Workflow](https://swisstransplant.github.io/rcookbook/#data-analysis-workflow) that I'm using in my own projects.
 
 A final word of caution.
 
@@ -111,7 +111,7 @@ tab
 
 ## Create analysis dataset
 
-We will do a complete case analysis. Actually, this is not really recommended; however, here it is fit for purpose. The analysis data set is stored in the object `titanic`.
+We will do a complete case analysis. Actually, this is not really recommended; however, in this tutorial, it is fit for purpose. The analysis data set is stored in the object `titanic`.
 
 How can missing data be addressed otherwise?
 
@@ -124,7 +124,7 @@ titanic = data[idx,]
 
 Quality control is a crucial step and should be part of any data analysis pipeline. A test is like a question to the data that should be true, for example:
 
-* Have all passangers a value in `passengerClass` (no missing)?
+* Do all passengers have a value in `passengerClass` (no missing)?
 * Are all the values in `age` larger than 0 and smaller than 100?
 
 As soon as the logical expression within the function `assert` is not met, an error will be thrown.
@@ -142,7 +142,7 @@ You can now extend the code block above. You could test the other variable `sex`
 I report some descriptives of the Titanic passengers, but I'm lazy and just report the sample size and age.
 
 ```{r}
-#| tbl-cap: 'Table 1: Descriptives of the Titanic passangers.'
+#| tbl-cap: 'Table 1: Descriptives of the Titanic passengers.'
 
 q_age = quantile(titanic$age, probs = c(0.5, 0.25, 0.75))
 
@@ -158,11 +158,11 @@ rownames(tab) = c("Sample Size",
                   "Age, median (IQR)")
 tab
 ```
-You can now try to extend Table 1 and also report the count (and %) for categorical variables `sex` and `passangerClass`.
+You can now try to extend Table 1 and also report the count (and %) for categorical variables `sex` and `passengerClass`.
 
 # Primary analysis
 
-We fit a regression model to predict a binary outcome with a logistic regression model. I also set the reference levels to my liking.
+We fit a logistic regression model to predict the binary outcome "survived: yes". I also set the reference levels to my liking.
 
 ```{r}
 titanic$sex = factor(titanic$sex, levels = c("male", "female"))
@@ -179,7 +179,7 @@ You can execute the lines in the code block below one by one and try to understa
 
 ```{r}
 #| message: false
-#| tbl-cap: 'Table 2: Results from logistic model.'
+#| tbl-cap: 'Table 2: Results from a logistic regression model.'
 
 tab             = as.data.frame.matrix(tab)
 tab$OR          = as.character(signif(exp(tab$Estimate), digits = 3))
