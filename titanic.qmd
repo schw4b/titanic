@@ -1,0 +1,204 @@
+---
+title: 'A reanalysis of the Titanic data set in R and Quarto'
+subtitle: 'Statistical report'
+author: Simon Schwab
+date: last-modified
+abstract: 'An introduction to Quarto for the participants of the Good Research Practice (GRP) course in 2024.'
+lang: en
+format:
+  html:
+    toc: true
+    css: styles.css
+    df-print: kable
+    embed-resources: true
+    code-fold: true
+    code-block-bg: '#FAFAFA'
+    code-block-border-left: '#A5D233'
+---
+
+# Objectives
+
+We will learn Quarto by a practical example: a reanalysis of the Titanic data. Quarto enables you to put together content, executable code, tables, and figures into a finished document. To learn more about Quarto, see <https://quarto.org>.
+
+In the analysis below, I stick to the following structure. This structure can also be seen in the table of contents on the right.
+
+```{mermaid}
+flowchart TB
+O("Objectives") --> D("Data import")
+D --> P("Data processing")
+P --> Q("Quality control")
+Q --> DS("Descriptive statistics")
+DS --> PA("Primary analysis")
+PA --> C("Computing information")
+```
+
+Here is a somewhat more detailed [Data Analysis Workflow](https://swisstransplant.github.io/rcookbook/#data-analysis-workflow) which I'm using in my own projects.
+
+A final word of caution.
+
+> "A $100 analysis can make a $1,000,000 study worthless" --Frank Harrell
+
+## Primary goal
+
+To identify factors associated with passenger survival in the 1912 Titanic incidence.
+
+# Data import
+
+Usually this step involves reading an Excel file, data cleaning, merging different data sets, reshaping data, etc. Here, it is very simple. We load the data from the package `carData`. We also do quality control with the package `testit`.
+
+If you don't have the required packages already installed, you first need to install them.
+
+``` r
+install.packages("carData")
+install.packages("testit")
+```
+
+```{r}
+library(carData)
+library(testit)
+```
+
+After loading the package you can find the data in the object `TitanicSurvival`; I will rename it to `data` for simplicity. Inspect the data. What variables are available, and what type of data is it (continuous, binary, categorical, etc.)?
+
+```{r}
+data = TitanicSurvival
+```
+
+Now, I show a random set of passengers (rows in the data).
+
+```{r}
+set.seed(2024)
+idx = sample(nrow(data), 6)
+data[idx,]
+```
+
+# Data processing
+
+I round the `age` to one digit; this is good enough. Is this necessary? No, but I have nothing else to process. This data set is very tidy and clean.. This never happens in real life.
+
+```{r}
+data$age = round(data$age, digits = 1)
+```
+
+## Missing data
+
+A very important step is to assess and address missing data. I found that `age` has missing data, so I report the number of missing values in age (%).
+
+```{r}
+count = sum(is.na(data$age))
+prc = sum(is.na(data$age))/nrow(data)*100
+
+tab = data.frame(age = sprintf("%d (%.1f%%)", count, prc))
+tab
+```
+
+## Create analysis dataset
+
+We will do a complete case analysis (not recommended); however, here it is fit for purpose. The analysis data set is stored in the object `titanic`.
+
+How can missing data be addressed otherwise?
+
+```{r}
+idx = complete.cases(data)
+titanic = data[idx,]
+```
+
+# Quality control
+
+Quality control is a crucial step and should be part of any data analysis pipeline. You can basically test anything. A test is like a question to the data that should be true, for example:
+
+* Are all the values in `age` larger than 0 and smaller than 100?
+
+As soon as the logical expression within the function `assert` is not met, an error will be thrown.
+
+```{r}
+assert(titanic$age > 0 & titanic$age < 100)
+```
+
+You can now extend the code block above. You could test the other variable `sex` for completeness. You can try to test that the age range is between 0 and 100, for example. You can test *anything*.
+
+> Test the obvious. 
+
+# Descriptive statistics
+
+I report some descriptives of the Titanic passengers, but I'm lazy and just report the sample size and age.
+
+```{r}
+q_age = quantile(titanic$age, probs = c(0.5, 0.25, 0.75))
+
+tab = data.frame(
+  
+  Descriptives = c(
+    sprintf("N=%d", nrow(titanic)),
+    sprintf("%0.f (%0.f--%0.f)", q_age[1], q_age[2], q_age[3])
+  )
+)
+
+rownames(tab) = c("Sample Size",
+                  "Age, median (IQR)")
+tab
+```
+You can now try to extend Table 1 and also report the count (and %) for categorical variables `sex` and `passangerClass`.
+
+## Histogram of age
+
+```{r}
+#| fig-width: 3
+#| fig-height: 3.5
+
+hist(titanic$age, main = "Distribution of age", xlab = "Age (years)",
+     col = "#001E7C", border = "grey90")
+```
+I don't like the label "Frequency"; change it to "Counts".
+
+
+# Primary analysis
+
+We fit a regression model to predict the binary outcome `survival` "yes". I also set the reference levels to my pleasure.
+
+```{r}
+titanic$event = titanic$survived == "yes"
+titanic$sex = factor(titanic$sex, levels = c("male", "female"))
+titanic$passengerClass = factor(titanic$passengerClass, levels = c("3rd", "2nd", "1st"))
+
+fit = glm(event ~ sex + age + passengerClass, data = titanic,  family = binomial)
+
+tab = summary(fit)$coefficients
+as.data.frame.matrix(tab)
+```
+However, this table is not looking nice and is also hard to interpret. I can explain why. Therefore, I make a custom table; that is how I like to report a logistic model.
+
+You can execute the lines in the code block below one by one and try to understand what is going on.
+
+```{r}
+#| message: false
+
+tab             = as.data.frame.matrix(tab)
+tab$OR          = as.character(signif(exp(tab$Estimate), digits = 3))
+tab$z.value.fmt = as.character(signif(tab$`z value`, digits = 3))
+tab$pvalue      = ggsurvfit::format_p(tab$`Pr(>|z|)`)
+
+# add 95% confidence interval
+ci = confint(fit, level = 0.95)
+lower = as.character(signif(exp(ci[,1]), digits = 2))
+upper = as.character(signif(exp(ci[,2]), digits = 2))
+
+tab$CI = sprintf("from %s to %s", lower, upper)
+
+tab.tidy = tab[, c("OR", "CI", "z.value.fmt", "pvalue")]
+colnames(tab.tidy) = c("Odds ratio", "95% CI", "z value", "p value")
+tab.tidy
+```
+The row names can be improved. Try it.
+
+Now we are done. We found that on the Titanic, it was not very ideal to be a 3rd class, a male, or an older passenger. And it was certainly not ideal to be all of this (it is an additive model). I will discuss the table in more detail if you wish.
+
+Any suggestion to improve this analysis? Also, if you have seen any error, typo, or any other mishap in this document, please let me know. I try to improve it every year.
+
+# Computing information
+
+```{r}
+sessionInfo()
+```
+
+
