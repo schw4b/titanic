@@ -29,6 +29,6 @@ install.packages("testit")
 
 4. Press "Render"
 
-You should see the final document in your browser.
+You should see the final document in your browser, just like here on my website <https://www.statsyup.org/titanic/>.
 
 
