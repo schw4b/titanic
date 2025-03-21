@@ -1,14 +1,15 @@
 ---
-title: 'A reanalysis of the Titanic data set in R and Quarto'
+title: 'Dynamic reporting with R and Quarto: reanalyzing the Titanic dataset'
 subtitle: 'Statistical report'
 author: Simon Schwab
 date: last-modified
-abstract: 'An introduction to Quarto for the participants in the Good Research Practice (GRP) course at the University of Zurich.'
+abstract: 'An introduction to Quarto for participants in the Good Research Practice (GRP) course at the University of Zurich.'
 lang: en
 format:
   html:
     toc: true
-    css: styles.css
+    theme: uzh.scss
+    linkcolor: '#FC4C02'
     df-print: kable
     embed-resources: true
     code-fold: true
@@ -19,6 +20,16 @@ format:
 # Objectives
 
 We will learn Quarto by a practical example: a reanalysis of the Titanic data. Quarto enables you to put together content, executable code, tables, and figures into a finished document. To learn more about Quarto, see <https://quarto.org>.
+
+We will focus on Quarto Documents, but you can also create other Quarto projects:
+
+* Presentations
+* Dashboards
+* Websites
+* Books
+* Manuscripts
+
+## Structure of this document
 
 In the analysis below, I stick to the following structure. This structure can also be seen in the table of contents on the right.
 
@@ -32,15 +43,21 @@ DS --> PA("Primary analysis")
 PA --> C("Computing information")
 ```
 
+::: {.callout-tip appearance="simple"}
+Quarto supports flowcharts using Mermaid. For more details, see <https://quarto.org/docs/authoring/diagrams.html>.
+:::
+
+::: {.callout-tip appearance="simple"}
 Here is a somewhat more detailed [Data Analysis Workflow](https://swisstransplant.github.io/rcookbook/#data-analysis-workflow) that I'm using in my own projects.
+:::
 
 A final word of caution.
 
-> "A $100 analysis can make a $1,000,000 study worthless" --Frank Harrell
+> "A \$100 analysis can make a \$1,000,000 study worthless" --Frank Harrell
 
-## Primary goal
+## Objective of our data analysis
 
-To identify factors associated with passenger survival in the 1912 Titanic incidence.
+To identify variables associated with passenger survival in the 1912 Titanic incidence.
 
 # Data import
 
@@ -58,19 +75,18 @@ library(carData)
 library(testit)
 ```
 
-After loading the package you can find the data in the object `TitanicSurvival`; I will rename it to `data` for simplicity. Inspect the data. What variables are available, and what type of data is it (continuous, binary, categorical, etc.)?
+After loading the package, you can find the data in the object `TitanicSurvival`; I will rename it to `data` for simplicity. I show data for some randomly selected passengers in the table below.
 
 ```{r}
 data = TitanicSurvival
-```
 
-Now, I show a random set of passengers (rows in the data).
-
-```{r}
 set.seed(2024)
 idx = sample(nrow(data), 6)
 data[idx,]
 ```
+::: {.callout-note title = "Exercise 1" appearance="simple"}
+Inspect the data, what variables are available and what type of data is it (continuous, binary, categorical, etc.)?
+:::
 
 # Data processing
 
@@ -78,7 +94,7 @@ This data set is very tidy and clean. We don't need to do a lot of processing.
 
 ## Histogram of age
 
-However, it is important to get an overview of the data. I need to understand how the data looks like, for example, by plotting histograms for all continuous data variables.
+However, it is important to get an overview of the data. I need to understand what the data looks like, for example, by plotting histograms for all continuous variables. In our data, only age is continuous.
 
 ```{r}
 #| fig-width: 3
@@ -87,11 +103,14 @@ However, it is important to get an overview of the data. I need to understand ho
 hist(data$age, main = "Distribution of age", xlab = "Age (years)",
      col = "#001E7C", border = "grey90")
 ```
-I don't like the label "Frequency"; change it to "Counts".
+
+::: {.callout-note title = "Exercise 2" appearance="simple"}
+Replace the label "Frequency" with "Counts".
+:::
 
 ## Definition of outcome
 
-Next, I define the primary outcome with a new variable called `event`. It is a binary outcome set to `TRUE` when the passenger survived, and `FALSE` otherwise.
+Next, I define the primary outcome with a new variable called `event`. It is a binary outcome set to `TRUE` when the passenger survived and `FALSE` otherwise.
 
 ```{r}
 data$event = data$survived == "yes"
@@ -99,7 +118,7 @@ data$event = data$survived == "yes"
 
 ## Missing data
 
-A very important step is to assess and address missing data. I found that `age` has missing data, so I report the number of missing values in age (%).
+A very important step is to assess and address missing data; `age` has missing data. Thus, I report the number of missing values in age (%).
 
 ```{r}
 count = sum(is.na(data$age))
@@ -108,34 +127,40 @@ prc = sum(is.na(data$age))/nrow(data)*100
 tab = data.frame(age = sprintf("%d (%.1f%%)", count, prc))
 tab
 ```
+::: {.callout-note title = "Exercise 3" appearance="simple"}
+What are the implications of these missing data on the interpretation of our results?
+:::
 
 ## Create analysis dataset
 
 We will do a complete case analysis. Actually, this is not really recommended; however, in this tutorial, it is fit for purpose. The analysis data set is stored in the object `titanic`.
-
-How can missing data be addressed otherwise?
 
 ```{r}
 idx = complete.cases(data)
 titanic = data[idx,]
 ```
 
+::: {.callout-note title = "Exercise 4" appearance="simple"}
+How can missing data be addressed otherwise?
+:::
+
 # Quality control
 
 Quality control is a crucial step and should be part of any data analysis pipeline. A test is like a question to the data that should be true, for example:
 
-* Do all passengers have a value in `passengerClass` (no missing)?
-* Are all the values in `age` larger than 0 and smaller than 100?
+-   Do all passengers have a value in `passengerClass` (no missing)?
+-   Are all the values in `age` larger than 0 and smaller than 100?
 
 As soon as the logical expression within the function `assert` is not met, an error will be thrown.
 
 ```{r}
 assert(!is.na(titanic$passengerClass))
 ```
+::: {.callout-note title = "Exercise 5" appearance="simple"}
+You can now extend the code block above. You could test the variable `sex` for completeness. You can try to test that the age range is between 0 and 100, for example.
+:::
 
-You can now extend the code block above. You could test the other variable `sex` for completeness. You can try to test that the age range is between 0 and 100, for example. You can test *anything*.
-
-> Test the obvious. 
+> You can test *anything*. Start by testing the obvious.
 
 # Descriptive statistics
 
@@ -150,19 +175,31 @@ tab = data.frame(
   
   Descriptives = c(
     sprintf("N=%d", nrow(titanic)),
-    sprintf("%0.f (%0.f--%0.f)", q_age[1], q_age[2], q_age[3])
+    sprintf("%0.f (%0.f--%0.f)", q_age[1], q_age[2], q_age[3]),
+    sprintf("%d (%0.f)", sum(titanic$sex == "female"), 
+            sum(titanic$sex == "female")/nrow(titanic)*100), # calculate %
+    sprintf("%d (%0.f)", sum(titanic$sex == "male"), 
+            sum(titanic$sex == "male")/nrow(titanic)*100) # calculate %
   )
 )
 
 rownames(tab) = c("Sample Size",
-                  "Age, median (IQR)")
+                  "Age in years, median (IQR)",
+                  "Sex: female (%)", "Sex: male (%)")
 tab
 ```
-You can now try to extend Table 1 and also report the count (and %) for categorical variables `sex` and `passengerClass`.
+
+::: {.callout-note title = "Exercise 6" appearance="simple"}
+You can now try to extend Table 1 and also report the number of passengers (and %) for the different levels in  `passengerClass`.
+:::
 
 # Primary analysis
 
-We fit a logistic regression model to predict the binary outcome "survived: yes". I also set the reference levels to my liking.
+I fit a logistic regression model to predict survival indicated in the variable `event`. The reference levels compare females to males and 1st/2nd class to 3rd class. 
+
+::: {.callout-tip appearance="simple"}
+The model defaults to using the first factor level as the reference, but this can be changed.
+:::
 
 ```{r}
 titanic$sex = factor(titanic$sex, levels = c("male", "female"))
@@ -173,9 +210,12 @@ fit = glm(event ~ sex + age + passengerClass, data = titanic,  family = binomial
 tab = summary(fit)$coefficients
 as.data.frame.matrix(tab)
 ```
-However, this table is not looking nice and is also hard to interpret. I can explain why. Therefore, I improve this table, see Table 2. That is how I like to report a logistic model.
 
-You can execute the lines in the code block below one by one and try to understand what is going on.
+This table is not looking nice and is also hard to interpret. Therefore, I improve this table; see Table 2. That is how I like to report a logistic model in a paper.
+
+::: {.callout-note title = "Exercise 7" appearance="simple"}
+Run each line in the code block below one by one, and take time to understand what each step does.
+:::
 
 ```{r}
 #| message: false
@@ -197,16 +237,19 @@ tab.tidy = tab[, c("OR", "CI", "z.value.fmt", "pvalue")]
 colnames(tab.tidy) = c("Odds ratio", "95% CI", "z value", "p value")
 tab.tidy
 ```
-The row names can be improved. Try it.
 
-Now we are done. We found that on the Titanic, it was not very ideal to be a 3rd class, a male, or an older passenger. And it was certainly not ideal to be all of this (it is an additive model). I will discuss the table in more detail if you wish.
+The row names could be improved, but I think we are done.
 
+We found that on the Titanic, females, younger passengers, and those in 1st or 2nd class had a higher chance of survival.
+
+::: {.callout-tip appearance="simple"}
 Any suggestion to improve this analysis? Also, if you have seen any error, typo, or any other mishap in this document, please let me know. I try to improve it every year.
+
+The lastest version of this document can be found at <https://github.com/schw4b/titanic>.
+:::
 
 # Computing information
 
 ```{r}
 sessionInfo()
 ```
-
-
