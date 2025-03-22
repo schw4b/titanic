@@ -44,7 +44,7 @@ PA --> C("Computing information")
 ```
 
 ::: {.callout-tip appearance="simple"}
-Quarto supports flowcharts using Mermaid. For more details, see <https://quarto.org/docs/authoring/diagrams.html>.
+Quarto supports flowcharts using Mermaid. For more details, see [Diagrams with Quarto](https://quarto.org/docs/authoring/diagrams.html).
 :::
 
 ::: {.callout-tip appearance="simple"}
