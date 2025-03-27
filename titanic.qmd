@@ -9,15 +9,12 @@ format:
   html:
     toc: true
     theme: uzh.scss
-    linkcolor: '#FC4C02'
     df-print: kable
     embed-resources: true
     code-fold: true
-    code-block-bg: '#FAFAFA'
-    code-block-border-left: '#A5D233'
 ---
 
-# Objectives
+## Objectives
 
 We will learn Quarto by a practical example: a reanalysis of the Titanic data. Quarto enables you to put together content, executable code, tables, and figures into a finished document. To learn more about Quarto, see <https://quarto.org>.
 
@@ -29,7 +26,7 @@ We will focus on Quarto Documents, but you can also create other Quarto projects
 * Books
 * Manuscripts
 
-## Structure of this document
+### Structure of this document
 
 In the analysis below, I stick to the following structure. This structure can also be seen in the table of contents on the right.
 
@@ -55,11 +52,11 @@ A final word of caution.
 
 > "A \$100 analysis can make a \$1,000,000 study worthless" --Frank Harrell
 
-## Objective of our data analysis
+### Objective of our data analysis
 
 To identify variables associated with passenger survival in the 1912 Titanic incidence.
 
-# Data import
+## Data import
 
 Usually this step involves reading an Excel file, data cleaning, merging different data sets, reshaping data, etc. Here, it is very simple. We load the data from the package `carData`. We also do quality control with the package `testit`.
 
@@ -88,11 +85,11 @@ data[idx,]
 Inspect the data, what variables are available and what type of data is it (continuous, binary, categorical, etc.)?
 :::
 
-# Data processing
+## Data processing
 
 This data set is very tidy and clean. We don't need to do a lot of processing.
 
-## Histogram of age
+### Histogram of age
 
 However, it is important to get an overview of the data. I need to understand what the data looks like, for example, by plotting histograms for all continuous variables. In our data, only age is continuous.
 
@@ -108,7 +105,7 @@ hist(data$age, main = "Distribution of age", xlab = "Age (years)",
 Replace the label "Frequency" with "Counts".
 :::
 
-## Definition of outcome
+### Definition of outcome
 
 Next, I define the primary outcome with a new variable called `event`. It is a binary outcome set to `TRUE` when the passenger survived and `FALSE` otherwise.
 
@@ -116,7 +113,7 @@ Next, I define the primary outcome with a new variable called `event`. It is a b
 data$event = data$survived == "yes"
 ```
 
-## Missing data
+### Missing data
 
 A very important step is to assess and address missing data; `age` has missing data. Thus, I report the number of missing values in age (%).
 
@@ -131,7 +128,7 @@ tab
 What are the implications of these missing data on the interpretation of our results?
 :::
 
-## Create analysis dataset
+### Create analysis dataset
 
 We will do a complete case analysis. Actually, this is not really recommended; however, in this tutorial, it is fit for purpose. The analysis data set is stored in the object `titanic`.
 
@@ -144,7 +141,7 @@ titanic = data[idx,]
 How can missing data be addressed otherwise?
 :::
 
-# Quality control
+## Quality control
 
 Quality control is a crucial step and should be part of any data analysis pipeline. A test is like a question to the data that should be true, for example:
 
@@ -162,9 +159,9 @@ You can now extend the code block above. You could test the variable `sex` for c
 
 > You can test *anything*. Start by testing the obvious.
 
-# Descriptive statistics
+## Descriptive statistics
 
-I report some descriptives of the Titanic passengers, but I'm lazy and just report the sample size and age.
+I report some descriptives for sample size, age, and sex.
 
 ```{r}
 #| tbl-cap: 'Table 1: Descriptives of the Titanic passengers.'
@@ -190,10 +187,10 @@ tab
 ```
 
 ::: {.callout-note title = "Exercise 6" appearance="simple"}
-You can now try to extend Table 1 and also report the number of passengers (and %) for the different levels in  `passengerClass`.
+You can now try to extend Table 1 and also report the number of passengers (and %) per  `passengerClass`.
 :::
 
-# Primary analysis
+## Primary analysis
 
 I fit a logistic regression model to predict survival indicated in the variable `event`. The reference levels compare females to males and 1st/2nd class to 3rd class. 
 
@@ -248,7 +245,7 @@ Any suggestion to improve this analysis? Also, if you have seen any error, typo,
 The lastest version of this document can be found at <https://github.com/schw4b/titanic>.
 :::
 
-# Computing information
+## Computing information
 
 ```{r}
 sessionInfo()
