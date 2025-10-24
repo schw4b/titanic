@@ -222,6 +222,7 @@ Run each line in the code block below one by one, and take time to understand wh
 #| tbl-cap: 'Table 2: Results from a logistic regression model.'
 
 tab             = as.data.frame.matrix(tab)
+# change beta to odds ratio
 tab$OR          = as.character(signif(exp(tab$Estimate), digits = 3))
 tab$z.value.fmt = as.character(signif(tab$`z value`, digits = 3))
 tab$pvalue      = ggsurvfit::format_p(tab$`Pr(>|z|)`)
