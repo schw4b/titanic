@@ -20,11 +20,11 @@ We will learn Quarto by a practical example: a reanalysis of the Titanic data. Q
 
 We will focus on Quarto Documents, but you can also create other Quarto projects:
 
-* Presentations
-* Dashboards
-* Websites
-* Books
-* Manuscripts
+- Presentations
+- Dashboards
+- Websites
+- Books
+- Manuscripts
 
 ### Structure of this document
 
@@ -81,6 +81,7 @@ set.seed(2024)
 idx = sample(nrow(data), 6)
 data[idx,]
 ```
+
 ::: {.callout-note title = "Exercise 1" appearance="simple"}
 Inspect the data, what variables are available and what type of data is it (continuous, binary, categorical, etc.)?
 :::
@@ -124,6 +125,7 @@ prc = sum(is.na(data$age))/nrow(data)*100
 tab = data.frame(age = sprintf("%d (%.1f%%)", count, prc))
 tab
 ```
+
 ::: {.callout-note title = "Exercise 3" appearance="simple"}
 What are the implications of these missing data on the interpretation of our results?
 :::
@@ -153,6 +155,7 @@ As soon as the logical expression within the function `assert` is not met, an er
 ```{r}
 assert(!is.na(titanic$passengerClass))
 ```
+
 ::: {.callout-note title = "Exercise 5" appearance="simple"}
 You can now extend the code block above. You could test the variable `sex` for completeness. You can try to test that the age range is between 0 and 100, for example.
 :::
@@ -187,12 +190,12 @@ tab
 ```
 
 ::: {.callout-note title = "Exercise 6" appearance="simple"}
-You can now try to extend Table 1 and also report the number of passengers (and %) per  `passengerClass`.
+You can now try to extend Table 1 and also report the number of passengers (and %) per `passengerClass`.
 :::
 
 ## Primary analysis
 
-I fit a logistic regression model to predict survival indicated in the variable `event`. The reference levels compare females to males and 1st/2nd class to 3rd class. 
+I fit a logistic regression model to predict survival indicated in the variable `event`. The reference levels compare females to males and 1st/2nd class to 3rd class.
 
 ::: {.callout-tip appearance="simple"}
 The model defaults to using the first factor level as the reference, but this can be changed.
