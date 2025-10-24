@@ -50,7 +50,7 @@ Here is a somewhat more detailed [Data Analysis Workflow](https://swisstransplan
 
 A final word of caution.
 
-> "A \$100 analysis can make a \$1,000,000 study worthless" --Frank Harrell
+> A \$100 analysis can make a \$1,000,000 study worthless --Frank Harrell
 
 ### Objective of our data analysis
 
