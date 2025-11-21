@@ -82,7 +82,7 @@ idx = sample(nrow(data), 6)
 data[idx,]
 ```
 
-::: {.callout-note title = "Exercise 1" appearance="simple"}
+::: {.callout-note title="Exercise 1" appearance="simple"}
 Inspect the data, what variables are available and what type of data is it (continuous, binary, categorical, etc.)?
 :::
 
@@ -102,7 +102,7 @@ hist(data$age, main = "Distribution of age", xlab = "Age (years)",
      col = "#001E7C", border = "grey90")
 ```
 
-::: {.callout-note title = "Exercise 2" appearance="simple"}
+::: {.callout-note title="Exercise 2" appearance="simple"}
 Replace the label "Frequency" with "Counts".
 :::
 
@@ -126,7 +126,7 @@ tab = data.frame(age = sprintf("%d (%.1f%%)", count, prc))
 tab
 ```
 
-::: {.callout-note title = "Exercise 3" appearance="simple"}
+::: {.callout-note title="Exercise 3" appearance="simple"}
 What are the implications of these missing data on the interpretation of our results?
 :::
 
@@ -139,7 +139,7 @@ idx = complete.cases(data)
 titanic = data[idx,]
 ```
 
-::: {.callout-note title = "Exercise 4" appearance="simple"}
+::: {.callout-note title="Exercise 4" appearance="simple"}
 How can missing data be addressed otherwise?
 :::
 
@@ -156,7 +156,7 @@ As soon as the logical expression within the function `assert` is not met, an er
 assert(!is.na(titanic$passengerClass))
 ```
 
-::: {.callout-note title = "Exercise 5" appearance="simple"}
+::: {.callout-note title="Exercise 5" appearance="simple"}
 You can now extend the code block above. You could test the variable `sex` for completeness. You can try to test that the age range is between 0 and 100, for example.
 :::
 
@@ -189,7 +189,7 @@ rownames(tab) = c("Sample Size",
 tab
 ```
 
-::: {.callout-note title = "Exercise 6" appearance="simple"}
+::: {.callout-note title="Exercise 6" appearance="simple"}
 You can now try to extend Table 1 and also report the number of passengers (and %) per `passengerClass`.
 :::
 
@@ -213,7 +213,7 @@ as.data.frame.matrix(tab)
 
 This table is not looking nice and is also hard to interpret. Therefore, I improve this table; see Table 2. That is how I like to report a logistic model in a paper.
 
-::: {.callout-note title = "Exercise 7" appearance="simple"}
+::: {.callout-note title="Exercise 7" appearance="simple"}
 Run each line in the code block below one by one, and take time to understand what each step does.
 :::
 
